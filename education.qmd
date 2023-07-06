@@ -1,0 +1,15 @@
+---
+title: "Global Education"
+author: "Rishi Sandrana"
+format: html
+editor: visual
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(tidyverse)
+library(rstanarm)
+```
+
