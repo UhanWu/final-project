@@ -11,5 +11,40 @@ editor: visual
 #| warning: false
 library(tidyverse)
 library(rstanarm)
+library(dplyr)
+```
+
+```{r}
+#| echo: false
+#| message: false
+iqData <- read_csv("data/IQRankings.csv")
+rankingData <- read_csv("data/EducationRankings.csv")
+scoresData <- read_csv("data/TestScoreData.csv")
+
+rankingData <- rankingData |>
+  select(country, rank2021, pop2023)
+
+iqData <- iqData |>
+  select(country, iq)
+
+scoresData <- scoresData |>
+  rename(country = Entity) |>
+  rename_at(7, ~ "score") |>
+  drop_na() |>
+  select(country, score)
+
+mergedData <- iqData |>
+  inner_join(scoresData, by = "country") |>
+  inner_join(rankingData, by = "country")
+```
+```{r}
+fit_obj <- stan_glm(
+  data = mergedData,
+  formula = rank2021 ~ iq + score,
+  family = gaussian,
+  refresh = 0
+)
+
+fit_obj
 ```
 
